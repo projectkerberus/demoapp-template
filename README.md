@@ -1,14 +1,22 @@
-# Notes
+# Demo app note
 
-Refer to this url:
+This repo contain the demo app.
 
-<https://tanzu.vmware.com/developer/guides/containers/deploy-locally-spring-boot-application-docker/>
+## Application source code
 
-```bash
-git clone https://github.com/bitnami/tutorials.git
+For demo app starting point refer to [this](https://github.com/spring-guides/gs-accessing-data-mysql) and with changes explained [here](https://github.com/bitnami/tutorials/blob/master/spring-boot-app/README.md).
+
+Further or Mysql compatibility the line is added in application.properties:
+
+```java
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 ```
 
-create the Dockerfile in spring-boot-app containing:
+Generate the WAR file by running the mvn package command. The resulting file will be located in target/gs-mysql-data-0.1.0.war.
+
+## Docker Build
+
+In the app-docker folder you find the Dockerfile containing:
 
 ```dockerfile
 FROM bitnami/tomcat:9.0
@@ -33,18 +41,10 @@ Docker compose yaml for testing image:
 version: '2'
 
 services:
-  mariadb:
-    image: 'bitnami/mariadb:10.3'
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - MARIADB_DATABASE=db_example
-      - MARIADB_USER=springuser
-      - MARIADB_PASSWORD=ThePassword
     myapp:
     image: 'DOCKER_USERNAME/spring-java-app'
     environment:
       - 'SPRING_APPLICATION_JSON={"spring": {"datasource":{"url": "jdbc:mysql://mariadb:3306/db_example", "username": "springuser", "password": "ThePassword"}}}'
-      # ADDED SINCE NOT PRESENT IN ORIGINAL DOCKER COMPOSE
       - ALLOW_EMPTY_PASSWORD=yes
     depends_on:
       - mariadb
@@ -61,7 +61,10 @@ curl 'localhost:8080/gs-mysql-data-0.1.0/demo/add?name=First&email=someemail@som
 curl 'localhost:8080/gs-mysql-data-0.1.0/demo/all'
 ```
 
-add dependency in Chart.yaml (not in requirements fiels since in deprecated, changed to a more recent mariadb image (statesful api version error)):
+## Helm chart
+
+The hem chart in this repo is the result of the 
+The add dependency in Chart.yaml (not in requirements fiels since in deprecated, changed to a more recent mariadb image (statesful api version error)):
 
 ```yaml
 - name: mariadb
