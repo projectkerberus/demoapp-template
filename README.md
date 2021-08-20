@@ -166,10 +166,12 @@ ingress:
 ```
 
 For having the pod deployed and Joined to mesh the namespace in which you deploy must have this further annotation, see file kuma-dataplane.yaml in various directory:
-  
+
+```yaml
   annotations:
     kuma.io/sidecar-injection: enabled
     kuma.io/mesh: default"
+```
 
 run:
 
