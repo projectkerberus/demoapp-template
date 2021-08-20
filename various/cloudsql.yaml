@@ -1,0 +1,24 @@
+apiVersion: database.gcp.crossplane.io/v1beta1
+kind: CloudSQLInstance
+metadata:
+  name: standard-cloudsql2
+  namespace: app
+spec:
+  forProvider:
+    databaseVersion: MYSQL_5_6
+    region: europe-west3
+    settings:
+      tier: db-n1-standard-1
+      dataDiskSizeGb: 10
+      dataDiskType: PD_SSD
+      ipConfiguration:
+        ipv4Enabled: true
+        authorizedNetworks:
+          - name: all
+            value: 0.0.0.0/0
+  writeConnectionSecretToRef:
+    name: mysqldb
+    namespace: app
+  providerConfigRef:
+    name: gcp-stack-template-provider-kerberusdemo
+
