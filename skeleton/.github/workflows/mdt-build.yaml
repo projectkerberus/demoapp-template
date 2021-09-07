@@ -1,0 +1,88 @@
+name: Publish Maven Package and Docker Image
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  maven-build:
+    name: Build Maven Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      filename: ${{ steps.war.outputs.filename }}
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+      - name: Publish package
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract Maven project version
+        run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+        id: project
+      - name: Cache maven
+        uses: actions/cache@v2
+        with:
+          path: target/*
+          key: target
+      - name: Set the output war name
+        id: war
+        run: echo "::set-output name=filename::gs-mysql-data-${{steps.project.outputs.version}}.war"
+      - name: Set the output tag value
+        id: tag
+        run: echo "::set-output name=tag::${{steps.project.outputs.version}}"
+
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [maven-build]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/cache@v2
+        id: restore-maven
+        with:
+          path: ./target/${{needs.maven-build.outputs.filename}}.war
+          key: target
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Dockerfile
+          push: true
+          build-args: |
+            FILENAME=target
+          tags: ghcr.io/maurosala/demoapp-mau:${{needs.maven-build.outputs.tag}}
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  tag-repo:
+    name: Create Tag and Branch
+    runs-on: ubuntu-latest
+    needs: [maven-build, docker-build]
+    steps:
+      - name: Create Branch
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: "gh-pages"
+      - name: Create Tag
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.maven-build.outputs.tag }}

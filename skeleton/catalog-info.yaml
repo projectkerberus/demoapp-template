@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{values.component_id | dump}}
+  description: ${{values.description | dump}}
+  annotations:
+    github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
+    backstage.io/techdocs-ref: dir:.
+    argocd/app-name: ${{values.component_id | dump}}
+    backstage.io/kubernetes-id: ${{values.component_id | dump}}
+    sonarqube.org/project-key: ${{values.destination.owner + "_" + values.destination.repo}}
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ${{values.destination.owner | dump}}

@@ -58,4 +58,12 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/{{values.destination.owner}}/{{values.destination.repo}}</url>
+        </repository>
+    </distributionManagement>
+
 </project>

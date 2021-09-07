@@ -1,0 +1,108 @@
+apiVersion: backstage.io/v1beta2
+kind: Template
+metadata:
+  name: demo-app-template
+  title: Amazon Web Services infrastructure template
+  description: Create a simple Demo App
+  tags:
+    - demo
+    - spring
+spec:
+  owner: diego.braga86@gmail.com
+  type: service
+
+  # these are the steps which are rendered in the frontend with the form input
+  parameters:
+    - title: Demp App values
+      required:
+        - component_id
+        - description
+        - dbHost
+        - dbPort
+        - dbUsername
+        - dbPassword
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this service does.
+        dbHost:
+          title: Database Host
+          type: string
+          description: Database Host
+        dbPort:
+          title: Database Port
+          type: integer
+          description: Database Port
+          default: 3306
+        dbUsername:
+          title: Database Username
+          type: string
+          description: Database Username
+        dbPassword:
+          title: Database Password
+          type: string
+          description: Database Password
+
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  # here's the steps that are executed in series in the scaffolder backend
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          component_id: "{{ parameters.component_id }}"
+          description: "{{ parameters.description }}"
+          dbHost: "{{ parameters.dbHost }}"
+          dbPort: "{{ parameters.dbPort }}"
+          dbUsername: "{{ parameters.dbUsername }}"
+          dbPassword: "{{ parameters.dbPassword }}"
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ["github.com"]
+        description: "This is a Demo App with name {{ parameters.component_id }}"
+        repoUrl: "{{ parameters.repoUrl }}"
+        repoVisibility: public
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: "{{ steps.publish.output.repoContentsUrl }}"
+        catalogInfoPath: "/catalog-info.yaml"
+
+    - id: argocd
+      name: Create application on ArgoCD
+      action: kerberus:argocd
+      input:
+        host: ${{parameters.repoUrl}}
+
+    - id: sonarcloud
+      name: Create application on SonarCloud
+      action: kerberus:sonarcloud
+      input:
+        host: ${{parameters.repoUrl}}
+
+  output:
+    remoteUrl: "{{ steps.publish.output.remoteUrl }}"
+    entityRef: "{{ steps.register.output.entityRef }}"
