@@ -92,11 +92,11 @@ spec:
         repoContentsUrl: "{{ steps.publish.output.repoContentsUrl }}"
         catalogInfoPath: "/catalog-info.yaml"
 
-    - id: argocd
-      name: Create application on ArgoCD
-      action: kerberus:argocd
-      input:
-        host: ${{parameters.repoUrl}}
+    # - id: argocd
+    #   name: Create application on ArgoCD
+    #   action: kerberus:argocd
+    #   input:
+    #     host: ${{parameters.repoUrl}}
 
     - id: sonarcloud
       name: Create application on SonarCloud
