@@ -65,7 +65,7 @@ jobs:
           push: true
           build-args: |
             FILENAME=target
-          tags: ghcr.io/maurosala/demoapp-mau:${{needs.maven-build.outputs.tag}}
+          tags: ghcr.io/${{ github.event.repository.owner }}/${{ github.event.repository.name }}:${{needs.maven-build.outputs.tag}}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
