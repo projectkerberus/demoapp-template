@@ -1,0 +1,52 @@
+name: Publish Helm Chart
+on:
+  workflow_run:
+    workflows: ["Publish Maven Package and Docker Image"]
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  release:
+    name: Build Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: "Get Previous tag"
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
+      - name: Create local changes
+        run: |
+          sed -i --regexp-extended '0,/version: *(.*)/{s//version: ${{ steps.previoustag.outputs.tag }}/}' charts/demoapp-mau/Chart.yaml
+          sed -i --regexp-extended '0,/appVersion: *(.*)/{s//appVersion: ${{ steps.previoustag.outputs.tag }}/}' charts/demoapp-mau/Chart.yaml
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git commit -m "Change helm version" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+
+      - name: Add Dependencies for Helm chart
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.2.1
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
