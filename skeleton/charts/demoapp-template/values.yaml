@@ -478,11 +478,12 @@ volumePermissions:
     requests: {}
 
 mariadb:
-
   enabled: false
   replication:
     enabled: false
-# Crossplane secret name contianing the db reference
+  # Crossplane secret name contianing the db reference
   db:
     secretname: mysqldb
-    dbname: db_example
+    name: db_example
+    user: ${{values.dbUsername}}
+    password: ${{values.dbPassword}}

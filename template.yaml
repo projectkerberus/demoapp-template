@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1beta2
 kind: Template
 metadata:
   name: demo-app-template
-  title: Amazon Web Services infrastructure template
+  title: Demo App template
   description: Create a simple Demo App
   tags:
     - demo
@@ -17,8 +17,8 @@ spec:
       required:
         - component_id
         - description
-        - dbHost
-        - dbPort
+        # - dbHost
+        # - dbPort
         - dbUsername
         - dbPassword
       properties:
@@ -30,15 +30,15 @@ spec:
           title: Description
           type: string
           description: Help others understand what this service does.
-        dbHost:
-          title: Database Host
-          type: string
-          description: Database Host
-        dbPort:
-          title: Database Port
-          type: integer
-          description: Database Port
-          default: 3306
+        # dbHost:
+        #   title: Database Host
+        #   type: string
+        #   description: Database Host
+        # dbPort:
+        #   title: Database Port
+        #   type: integer
+        #   description: Database Port
+        #   default: 3306
         dbUsername:
           title: Database Username
           type: string
@@ -70,8 +70,8 @@ spec:
         values:
           component_id: "{{ parameters.component_id }}"
           description: "{{ parameters.description }}"
-          dbHost: "{{ parameters.dbHost }}"
-          dbPort: "{{ parameters.dbPort }}"
+          # dbHost: "{{ parameters.dbHost }}"
+          # dbPort: "{{ parameters.dbPort }}"
           dbUsername: "{{ parameters.dbUsername }}"
           dbPassword: "{{ parameters.dbPassword }}"
 
