@@ -74,6 +74,7 @@ spec:
           dbPort: "{{ parameters.dbPort }}"
           dbUsername: "{{ parameters.dbUsername }}"
           dbPassword: "{{ parameters.dbPassword }}"
+          destination: "{{ parseRepoUrl parameters.repoUrl }}"
 
     - id: publish
       name: Publish
