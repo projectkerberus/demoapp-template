@@ -84,6 +84,7 @@ spec:
         description: "This is a Demo App with name {{ parameters.component_id }}"
         repoUrl: "{{ parameters.repoUrl }}"
         repoVisibility: public
+        defaultBranch: main
 
     - id: register
       name: Register
