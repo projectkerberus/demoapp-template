@@ -1,11 +1,11 @@
 mysql:
   image: mysql
   ports:
-    - "3306:3306"
+    - '3306:3306'
   environment:
-    - MYSQL_USER=springuser
-    - MYSQL_PASSWORD=ThePassword
-    - MYSQL_DATABASE=db_example
-    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_USER=${{values.dbUsername}}
+    - MYSQL_PASSWORD=${{values.dbPassword}}
+    - MYSQL_DATABASE=${{values.dbHost}}
+    - MYSQL_ROOT_PASSWORD=${{values.dbPassword}}
   volumes:
-    - "./conf.d:/etc/mysql/conf.d:ro"
+    - './conf.d:/etc/mysql/conf.d:ro'
