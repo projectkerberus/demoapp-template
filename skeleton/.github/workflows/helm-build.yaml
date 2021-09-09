@@ -27,6 +27,13 @@ jobs:
           current-version: ${{ steps.actions_project_version_check.outputs.version }}
           version-fragment: "bug"
 
+      - name: Create Tag
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.bump_version.outputs.next-version }}
+
       - name: Create local changes
         run: |
           sed -i --regexp-extended '0,/version: *(.*)/{s//version: ${{ steps.bump_version.outputs.next-version }}/}' charts/${{github.event.repository.name}}/Chart.yaml

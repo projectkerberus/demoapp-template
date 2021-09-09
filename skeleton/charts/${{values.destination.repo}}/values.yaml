@@ -52,8 +52,8 @@ extraDeploy: []
 ## @param image.debug Specify if debug logs should be enabled
 ##
 image:
-  registry: docker.io
-  repository: idallaserra/spring-java-app
+  registry: ghcr.io
+  repository: ${{values.destination.owner}}/{{values.destination.repo}}
   tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
