@@ -20,10 +20,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           file-to-check: pom.xml
 
+      - name: Bump release version
+        id: bump_version
+        uses: christian-draeger/increment-semantic-version@1.0.2
+        with:
+          current-version: ${{ steps.actions_project_version_check.outputs.version }}
+          version-fragment: "bug"
+
       - name: Create local changes
         run: |
-          sed -i --regexp-extended '0,/version: *(.*)/{s//version: ${{ steps.actions_project_version_check.outputs.version }}/}' charts/${{github.event.repository.name}}/Chart.yaml
-          sed -i --regexp-extended '0,/appVersion: *(.*)/{s//appVersion: ${{ steps.actions_project_version_check.outputs.version }}/}' charts/${{github.event.repository.name}}/Chart.yaml
+          sed -i --regexp-extended '0,/version: *(.*)/{s//version: ${{ steps.bump_version.outputs.next-version }}/}' charts/${{github.event.repository.name}}/Chart.yaml
+          sed -i --regexp-extended '0,/appVersion: *(.*)/{s//appVersion: ${{ steps.bump_version.outputs.next-version }}/}' charts/${{github.event.repository.name}}/Chart.yaml
 
       - name: Configure Git
         run: |
