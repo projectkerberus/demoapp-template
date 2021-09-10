@@ -1,23 +1,23 @@
 apiVersion: database.aws.crossplane.io/v1beta1
 kind: RDSInstance
 metadata:
-  name: ${{values.rdsRef}}
+  name: demoapp-db
   labels:
-    backstage.io/kubernetes-id: ${{values.component_id}}
+    backstage.io/kubernetes-id: demoapp
 spec:
   forProvider:
-    region: ${{values.rdsRegion}}
-    allocatedStorage: ${{values.rdsDataDiskSizeGb}}
+    region: eu-central-1
+    allocatedStorage: 10
     autoMinorVersionUpgrade: true
     backupRetentionPeriod: 0
     caCertificateIdentifier: rds-ca-2019
     copyTagsToSnapshot: false
-    dbInstanceClass: ${{values.rdsInstanceClass}}
+    dbInstanceClass: db.t3.small
     deletionProtection: false
     enableIAMDatabaseAuthentication: false
     enablePerformanceInsights: false
     engine: mariadb
-    engineVersion: ${{values.rdsEngineVersion | dump}}
+    engineVersion: '10.4.13'
     licenseModel: mariadbql-license
     masterUsername: amministratore
     multiAZ: false
@@ -25,7 +25,7 @@ spec:
     port: 3306
     publiclyAccessible: true
     storageEncrypted: false
-    storageType: ${{values.rdsStorageType}}
+    storageType: standard
   writeConnectionSecretToRef:
     name: rdsmariadbql-conn
     namespace: crossplane-system
