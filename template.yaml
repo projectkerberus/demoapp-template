@@ -100,7 +100,7 @@ spec:
       action: kerberus:argocd
       input:
         host: ${{parameters.repoUrl}}
-        path: charts/${{parameters.repoUrl.repo}}
+        pathRepoSubfolder: true
 
     - id: sonarcloud
       name: Create application on SonarCloud
