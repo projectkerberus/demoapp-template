@@ -32,7 +32,8 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}:${{ steps.actions_project_version_check.outputs.version }}
+          tags: ghcr.io/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}:latest
+          # tags: ghcr.io/${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}:${{ steps.actions_project_version_check.outputs.version }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
