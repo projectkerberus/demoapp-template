@@ -488,4 +488,3 @@ mariadb:
     user: ${{values.dbUsername}}
     password: ${{values.dbPassword}}
     endpoint: ${{values.dbHost}}
-    port: ${{values.dbPort}}

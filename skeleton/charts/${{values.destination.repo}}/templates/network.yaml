@@ -1,0 +1,81 @@
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: VPC
+metadata:
+  name: demoapp
+spec:
+  forProvider:
+    region: eu-central-1
+    cidrBlock: 10.1.0.0/16
+    enableDnsSupport: true
+    enableDnsHostNames: true
+  providerConfigRef:
+    name: aws-stack-template-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: InternetGateway
+metadata:
+  name: demoapp-ig
+spec:
+  forProvider:
+    region: eu-central-1
+    vpcIdRef:
+      name: demoapp
+  providerConfigRef:
+    name: aws-stack-template-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: demoapp-sn0
+  labels:
+    zone: eu-central-1a
+    access: private
+spec:
+  forProvider:
+    region: eu-central-1
+    mapPublicIPOnLaunch: true
+    cidrBlock: 10.1.1.0/24
+    availabilityZone: eu-central-1a
+    vpcIdRef:
+      name: demoapp
+  providerConfigRef:
+    name: aws-stack-template-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: demoapp-sn1
+  labels:
+    zone: eu-central-1b
+    access: private
+spec:
+  forProvider:
+    region: eu-central-1
+    mapPublicIPOnLaunch: true
+    cidrBlock: 10.1.2.0/24
+    availabilityZone: eu-central-1b
+    vpcIdRef:
+      name: demoapp
+  providerConfigRef:
+    name: aws-stack-template-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: RouteTable
+metadata:
+  name: demoapp-rt
+spec:
+  forProvider:
+    region: eu-central-1
+    vpcIdRef:
+      name: demoapp
+    routes:
+      - destinationCidrBlock: 0.0.0.0/0
+        gatewayIdRef:
+          name: demoapp-ig
+    associations:
+      - subnetIdRef:
+          name: demoapp-sn0
+      - subnetIdRef:
+          name: demoapp-sn1
+  providerConfigRef:
+    name: aws-stack-template-provider
