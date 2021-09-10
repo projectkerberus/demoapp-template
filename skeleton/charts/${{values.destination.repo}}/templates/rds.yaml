@@ -18,7 +18,7 @@ spec:
     enablePerformanceInsights: false
     engine: mariadb
     engineVersion: '10.4.13'
-    licenseModel: mariadbql-license
+    licenseModel: mariadb-license
     masterUsername: amministratore
     multiAZ: false
     skipFinalSnapshotBeforeDeletion: true
