@@ -487,3 +487,5 @@ mariadb:
     name: db_example
     user: ${{values.dbUsername}}
     password: ${{values.dbPassword}}
+    endpoint: ${{values.dbHost }}
+    port: ${{values.dbPort }}
