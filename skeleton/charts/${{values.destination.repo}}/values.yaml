@@ -420,7 +420,7 @@ ingress:
   secrets: []
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion: ""
+  apiVersion: "networking.k8s.io/v1beta1"
   ## @param ingress.path Ingress path
   ##
   path: /
