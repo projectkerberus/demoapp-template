@@ -1,0 +1,21 @@
+{{- if .Values.commonLabels }}
+  ---
+{{- end }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mysql-service
+  name: mysql-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  externalName: demoapp-db.ccdeexqykzxr.eu-central-1.rds.amazonaws.com
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+  selector:
+    app: mysql-service
+  type: ExternalName
+status:
+  loadBalancer: {}

@@ -1,15 +1,15 @@
-apiVersion: ec2.aws.crossplane.io/v1beta1
-kind: VPC
-metadata:
-  name: demoapp
-spec:
-  forProvider:
-    region: eu-central-1
-    cidrBlock: 10.1.0.0/16
-    enableDnsSupport: true
-    enableDnsHostNames: true
-  providerConfigRef:
-    name: aws-stack-template-provider
+# apiVersion: ec2.aws.crossplane.io/v1beta1
+# kind: VPC
+# metadata:
+#   name: demoapp
+# spec:
+#   forProvider:
+#     region: eu-central-1
+#     cidrBlock: 10.1.0.0/16
+#     enableDnsSupport: true
+#     enableDnsHostNames: true
+#   providerConfigRef:
+#     name: aws-stack-template-provider
 ---
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: InternetGateway
@@ -19,7 +19,7 @@ spec:
   forProvider:
     region: eu-central-1
     vpcIdRef:
-      name: demoapp
+      name: kerberus
   providerConfigRef:
     name: aws-stack-template-provider
 ---
@@ -37,7 +37,7 @@ spec:
     cidrBlock: 10.1.1.0/24
     availabilityZone: eu-central-1a
     vpcIdRef:
-      name: demoapp
+      name: kerberus
   providerConfigRef:
     name: aws-stack-template-provider
 ---
@@ -55,7 +55,7 @@ spec:
     cidrBlock: 10.1.2.0/24
     availabilityZone: eu-central-1b
     vpcIdRef:
-      name: demoapp
+      name: kerberus
   providerConfigRef:
     name: aws-stack-template-provider
 ---
@@ -67,7 +67,7 @@ spec:
   forProvider:
     region: eu-central-1
     vpcIdRef:
-      name: demoapp
+      name: kerberus
     routes:
       - destinationCidrBlock: 0.0.0.0/0
         gatewayIdRef:
