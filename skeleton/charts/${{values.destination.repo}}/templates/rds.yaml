@@ -22,7 +22,7 @@ spec:
     engine: mariadb
     engineVersion: '10.4.13'
     licenseModel: general-public-license
-    masterUsername: {{ .Values.mariadb.db.user }}
+    masterUsername: {{ .Values.mariadb.db.user | quote }}
     masterPasswordSecretRef:
       key: password
       name: {{ .Values.mariadb.db.secretname }}
