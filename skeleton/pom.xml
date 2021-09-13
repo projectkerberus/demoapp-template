@@ -22,6 +22,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-aws-context</artifactId>
+            <version>2.4.8</version>
         </dependency>
 
         <dependency>
