@@ -15,7 +15,7 @@ spec:
     backupRetentionPeriod: 0
     caCertificateIdentifier: rds-ca-2019
     copyTagsToSnapshot: false
-    dbInstanceClass: db.t3.small
+    dbInstanceClass: db.t2.micro
     deletionProtection: false
     enableIAMDatabaseAuthentication: false
     enablePerformanceInsights: false
