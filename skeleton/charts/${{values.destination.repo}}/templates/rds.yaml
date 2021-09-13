@@ -1,3 +1,6 @@
+{{- if .Values.commonLabels }}
+  ---
+{{- end }}
 apiVersion: database.aws.crossplane.io/v1beta1
 kind: RDSInstance
 metadata:
@@ -19,7 +22,12 @@ spec:
     engine: mariadb
     engineVersion: '10.4.13'
     licenseModel: general-public-license
-    masterUsername: amministratore
+    masterUsername: {{ .Values.mariadb.db.user }}
+    masterPasswordSecretRef:
+      key: password
+      name: {{ .Values.mariadb.db.secretname }}
+      namespace: {{ .Release.Namespace }}
+    vpcSecurityGroupIds: [vpc-0d6d1cf6148cca844]
     multiAZ: false
     skipFinalSnapshotBeforeDeletion: true
     port: 3306
