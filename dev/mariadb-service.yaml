@@ -6,7 +6,7 @@ metadata:
   name: mysql-service
   namespace: alien-07
 spec:
-  externalName: database-test.ccdeexqykzxr.eu-central-1.rds.amazonaws.com
+  externalName: mysql-test.ccdeexqykzxr.eu-central-1.rds.amazonaws.com
   ports:
     - port: 3306
       protocol: TCP

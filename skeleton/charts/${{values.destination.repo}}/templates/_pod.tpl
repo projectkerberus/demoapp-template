@@ -88,7 +88,7 @@ containers:
         name: {{ .Values.mariadb.db.secretname }}
         key: password
   - name: SPRING_APPLICATION_JSON
-    value: {{"'{\"spring\": {\"datasource\":{\"url\": \"jdbc:mysql://$(DBENDPOINT):3306/database-test?useSSL=false\",\"username\": \"$(DBUSERNAME)\", \"password\": \"$(DBPASSWD)\"}}}'"}}
+    value: {{"'{\"spring\": {\"datasource\":{\"url\": \"jdbc:mysql://$(DBENDPOINT):3306/mysqltst?useSSL=false\",\"username\": \"$(DBUSERNAME)\", \"password\": \"$(DBPASSWD)\"}}}'"}}
   {{- if .Values.extraEnvVars }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 2 }}
   {{- end }}

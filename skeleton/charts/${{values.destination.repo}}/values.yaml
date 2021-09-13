@@ -484,7 +484,7 @@ mariadb:
   # Crossplane secret name contianing the db reference
   db:
     secretname: mysqldb
-    name: database-test
+    name: mysqltst
     user: ${{values.dbUsername}}
     password: ${{values.dbPassword}}
     endpoint: ${{values.dbHost}}
